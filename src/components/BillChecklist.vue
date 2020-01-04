@@ -41,22 +41,6 @@ export default {
 </script>
 
 <style>
-main{
-    display: flex;
-    justify-content: center;
-}
-.container{
-    display: grid;
-}
-#heading{
-    transform: rotate(-6deg);
-    background-color: #E7DAB6;
-    width: 30%;
-    justify-self: center;
-}
-#heading h1 {
-    margin: 0px;
-}
 #bill-list{
     padding: 0px;
     width: 50vw;

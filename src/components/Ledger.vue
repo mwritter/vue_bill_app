@@ -1,19 +1,23 @@
 <template>
   <main>
-      <h1 id="heading" class="text">Ledger</h1>
-      <div class="ledger-item">
-          <span class="text">Current Total</span>
-          <span class="text">${{currentTotal}}</span>
-      </div>
-      <div id="completed-bills">
-          <ul id="ledger-list">
-              <li v-for="bill in bills" :key="bill.name">
-                  <div class="ledger-item">
-                      <span class="text bill-name">{{bill.name}}</span>
-                      <span class="text bill-value">-${{bill.value}}</span>
-                  </div>
-              </li>
-          </ul>
+      <div class="container">
+        <h1 id="heading" class="text">Ledger</h1>
+        <div class="ledger-item">
+            <span class="text">Current Total</span>
+            <span class="text">${{this.getCurrentTotal}}</span>
+        </div>
+        <div id="completed-bills">
+            <ul id="ledger-list" class="text">
+                <li class="ledger-item" v-for="bill in bills" :key="bill.name">
+                    <span class="bill-name">{{bill.name}}</span>
+                    <span class="bill-value">-${{bill.value}}</span>
+                </li>
+                <li class="ledger-item" v-if="miscs.length > 0">
+                    <span class="bill-name">Miscellaneous</span>
+                    <span class="bill-value">-${{this.getCurrentMiscTotal}}</span>
+                </li>
+            </ul>
+        </div>
       </div>
   </main>
 </template>
@@ -22,6 +26,9 @@
 export default {
     name: 'Ledger',
     props:{
+        miscs: {
+            type: Array
+        },
         bills: {
             type: Array
         },
@@ -37,21 +44,26 @@ export default {
     computed: {
         getCurrentTotal() {
             let currentTotal = this.currentTotal;
-            for(const bill of this.bills){
+            const ledgerItems = [...this.bills, ...this.miscs]
+            for(const bill of ledgerItems){
                 if (bill.complete){
                     currentTotal -= bill.value;
                 }
             }
             return currentTotal;
+        },
+        getCurrentMiscTotal() {
+            let total = 0;
+            for(const misc of this.miscs){
+                total += misc.value;
+            }
+            return total;
         }
     }
 }
 </script>
 
 <style>
-main{
-    display: grid;
-}
 .ledger-item{
     display: flex;
     justify-content: space-between;
@@ -65,7 +77,5 @@ main{
 .bill-value{
     color: red;
 }
-input#currentTotal:focus{
-    outline: none;
-}
+
 </style>

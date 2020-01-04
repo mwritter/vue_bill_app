@@ -5,19 +5,22 @@
       <input id="currentTotal" name="current-total" v-model="currentTotal" type="number">
     </div>
     <app-bill-checklist @toggleBill="toggleBill" :bills="this.getBills()" />
-    <app-ledger :bills="this.getCompletedBills" :currentTotal="this.getCurrentTotal()"/>
+    <app-ledger :miscs="this.getMisc" :bills="this.getCompletedBills" :currentTotal="this.getCurrentTotal()"/>
+    <app-misc :miscs="this.getMisc" ></app-misc>
   </div>
 </template>
 
 <script>
 import BillChecklist from './components/BillChecklist'
 import Ledger from './components/Ledger'
+import Misc from './components/Misc'
 
 export default {
   name: 'app',
   components: {
     'app-bill-checklist': BillChecklist,
-    'app-ledger': Ledger
+    'app-ledger': Ledger,
+    'app-misc': Misc
   },
   data(){
     return {
@@ -31,22 +34,31 @@ export default {
         {name:'Toyota', value: 216.00, complete: false},
         {name:'Nission', value: 245.00, complete: false},
         {name:'Car insurance', value: 195.00, complete: false}
+      ],
+      miscs: [
+        {name: 'Smoothies', value: 10.00, id: 1, complete: true},
+        {name: 'Smoothies', value: 10.00, id: 2, complete: true}
+
       ]
     }
   },
   computed: {
     getCompletedBills(){
-      return this.bills.filter(bill => {
-        return bill.complete;
+      const completed = this.bills.filter(bill => {
+        return bill.complete
       })
-    }
+      return completed
+    },
+    getMisc(){
+      return this.miscs;
+    },
   },
   methods: {
     getBills() {
       return this.bills;
     },
     getCurrentTotal(){
-      return this.currentTotal;
+      return parseFloat(this.currentTotal);
     },
     toggleBill(bill){
       bill.complete = !bill.complete;
@@ -75,6 +87,19 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+main{
+    display: flex;
+    justify-content: center;
+}
+.container{
+    display: grid;
+}
+#heading{
+    transform: rotate(-6deg);
+    background-color: #E7DAB6;
+    width: 30%;
+    justify-self: center;
 }
 .text{
   font-family: 'Caveat', cursive;
