@@ -2,75 +2,81 @@
   <div id="app">
     <div id="controls">
       <label for="current-total">Current Total</label>
-      <input id="currentTotal" name="current-total" v-model="currentTotal" type="number">
+      <input id="currentTotal" name="current-total" v-model="currentTotal" type="number" />
     </div>
-    <app-bill-checklist @toggleBill="toggleBill" :bills="this.getBills()" />
-    <app-ledger :miscs="this.getMisc" :bills="this.getCompletedBills" :currentTotal="this.getCurrentTotal()"/>
-    <app-misc :miscs="this.getMisc" ></app-misc>
+    <div id="components">
+      <app-bill-checklist @toggleBill="toggleBill" :bills="this.getBills()" />
+      <app-ledger
+        :miscs="this.getMisc"
+        :bills="this.getCompletedBills"
+        :currentTotal="this.getCurrentTotal"
+      />
+      <app-misc :miscs="this.getMisc"></app-misc>
+    </div>
   </div>
 </template>
 
 <script>
-import BillChecklist from './components/BillChecklist'
-import Ledger from './components/Ledger'
-import Misc from './components/Misc'
+import BillChecklist from "./components/BillChecklist";
+import Ledger from "./components/Ledger";
+import Misc from "./components/Misc";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    'app-bill-checklist': BillChecklist,
-    'app-ledger': Ledger,
-    'app-misc': Misc
+    "app-bill-checklist": BillChecklist,
+    "app-ledger": Ledger,
+    "app-misc": Misc
   },
-  data(){
+  data() {
     return {
       currentTotal: 0,
       bills: [
-        {name:'Rent', value: 535.00, complete: false},
-        {name:'Mediacom', value: 65.00, complete: false},
-        {name:'Student Loan' , value: 460.00, complete: false},
-        {name:'Utility', value: 95.00, complete: false},
-        {name:'Phone', value: 181.00, complete: false},
-        {name:'Toyota', value: 216.00, complete: false},
-        {name:'Nission', value: 245.00, complete: false},
-        {name:'Car insurance', value: 195.00, complete: false}
+        { name: "Rent", value: 535.0, complete: false },
+        { name: "Mediacom", value: 65.0, complete: false },
+        { name: "Student Loan", value: 460.0, complete: false },
+        { name: "Utility", value: 95.0, complete: false },
+        { name: "Phone", value: 181.0, complete: false },
+        { name: "Toyota", value: 216.0, complete: false },
+        { name: "Nission", value: 245.0, complete: false },
+        { name: "Car insurance", value: 195.0, complete: false }
       ],
       miscs: [
-        {name: 'Smoothies', value: 10.00, id: 1, complete: true},
-        {name: 'Smoothies', value: 10.00, id: 2, complete: true}
-
+        { name: "Smoothies", value: 10.0, id: 1, complete: true },
+        { name: "Smoothies", value: 10.0, id: 2, complete: true }
       ]
-    }
+    };
   },
   computed: {
-    getCompletedBills(){
+    getCompletedBills() {
       const completed = this.bills.filter(bill => {
-        return bill.complete
-      })
-      return completed
+        return bill.complete;
+      });
+      return completed;
     },
-    getMisc(){
+    getMisc() {
       return this.miscs;
     },
+    getCurrentTotal() {
+      return parseFloat(this.currentTotal);
+    }
   },
   methods: {
     getBills() {
       return this.bills;
     },
-    getCurrentTotal(){
-      return parseFloat(this.currentTotal);
-    },
-    toggleBill(bill){
+    toggleBill(bill) {
       bill.complete = !bill.complete;
+      this.currentTotal = parseFloat(this.currentTotal);
       // after toggle
-      if (bill.complete){
-        this.currentTotal -= parseFloat(bill.value)
+      if (bill.complete) {
+        this.currentTotal -= parseFloat(bill.value);
       } else {
-        this.currentTotal += parseFloat(bill.value)
+        this.currentTotal += parseFloat(bill.value);
       }
-    },
+    }
   }
-}
+};
 </script>
 
 <style>
@@ -81,34 +87,43 @@ export default {
 }
 #app {
   display: gird;
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
 }
-main{
-    display: flex;
-    justify-content: center;
+#components {
+  display: grid;
+  align-content: start;
+  grid-template-columns: 1fr 1fr 1fr;
 }
-.container{
-    display: grid;
+main {
+  display: flex;
+  justify-content: center;
 }
-#heading{
-    transform: rotate(-6deg);
-    background-color: #E7DAB6;
-    width: 30%;
-    justify-self: center;
+.container {
+  display: grid;
+  height: 100vh;
+  width: 75%;
+  align-content: start;
 }
-.text{
-  font-family: 'Caveat', cursive;
+#heading {
+  transform: rotate(-6deg);
+  background-color: #e7dab6;
+  width: 30%;
+  height: 35px;
+  justify-self: center;
+}
+.text {
+  font-family: "Caveat", cursive;
   font-size: 1.5em;
 }
 #controls {
   margin-bottom: 30px;
 }
-#controls #currentTotal{
+#controls #currentTotal {
   max-width: 100px;
   font-size: 1.2em;
   margin-left: 10px;
