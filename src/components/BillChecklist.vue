@@ -7,7 +7,7 @@
           <ul id="bill-list">
               <li class="bill-list-item" v-for="(bill) in bills" :key="bill.name">
                     <div>
-                        <input type="checkbox" />
+                        <input @click="toggleBill(bill)" :id="bill.name" type="checkbox" />
                         <label class="text" for="price">{{bill.name}}</label>
                     </div>
                     <span id="price" class="text" name="price">${{bill.value}}</span>
@@ -23,6 +23,18 @@ export default {
     props:{
         bills: {
             type: Array
+        }
+    },
+    mounted(){
+        for(const bill of this.bills){
+            if (bill.complete){
+                document.getElementById(bill.name).checked = true;
+            }
+        }
+    },
+    methods: {
+        toggleBill(bill) {
+            this.$emit("toggleBill", bill);
         }
     }
 }
@@ -41,15 +53,13 @@ main{
     background-color: #E7DAB6;
     width: 30%;
     justify-self: center;
-    /* background-image: url('../assets/logo.png') no-repeat; */
-    /* background-size: 100%; */
-    /* clip-path: polygon(100% 23%, 91% 31%, 100% 38%, 89% 59%, 100% 73%, 92% 86%, 100% 100%, 0 100%, 0 0, 100% 0); */
 }
 #heading h1 {
     margin: 0px;
 }
 #bill-list{
-    width: 500px;
+    padding: 0px;
+    width: 50vw;
 }
 .bill-list-item{
     display: flex;
