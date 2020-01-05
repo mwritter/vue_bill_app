@@ -11,7 +11,7 @@
         :bills="this.getCompletedBills"
         :currentTotal="this.getCurrentTotal"
       />
-      <app-misc :miscs="this.getMisc"></app-misc>
+      <app-misc @addMisc="addMisc" :miscs="this.getMisc"></app-misc>
     </div>
   </div>
 </template>
@@ -34,17 +34,16 @@ export default {
       bills: [
         { name: "Rent", value: 535.0, complete: false },
         { name: "Mediacom", value: 65.0, complete: false },
+        { name: "Gas", value: 25.0, complete: false },
         { name: "Student Loan", value: 460.0, complete: false },
         { name: "Utility", value: 95.0, complete: false },
         { name: "Phone", value: 181.0, complete: false },
         { name: "Toyota", value: 216.0, complete: false },
         { name: "Nission", value: 245.0, complete: false },
-        { name: "Car insurance", value: 195.0, complete: false }
+        { name: "Car insurance", value: 195.0, complete: false },
+        { name: "Gym", value: 20.0, complete: false },
       ],
-      miscs: [
-        { name: "Smoothies", value: 10.0, id: 1, complete: true },
-        { name: "Smoothies", value: 10.0, id: 2, complete: true }
-      ]
+      miscs: []
     };
   },
   computed: {
@@ -74,6 +73,11 @@ export default {
       } else {
         this.currentTotal += parseFloat(bill.value);
       }
+    },
+    addMisc(misc){
+      this.miscs = misc
+        ? [...this.miscs, misc]
+        : this.misc;
     }
   }
 };
@@ -112,9 +116,10 @@ main {
 #heading {
   transform: rotate(-6deg);
   background-color: #e7dab6;
-  width: 30%;
+  width: 55%;
   height: 35px;
   justify-self: center;
+  margin-bottom: 2rem;
 }
 .text {
   font-family: "Caveat", cursive;

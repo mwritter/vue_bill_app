@@ -10,6 +10,11 @@
           <span class="misc-value">-${{misc.value}}</span>
         </li>
       </ul>
+      <div id="new-misc">
+        <input type="text">
+        <input type="number">
+        <button @click="this.addMisc()">Submit</button>
+      </div>
       <div class="text misc-list-item">
         <span>Total Spent</span>
         <span>${{this.getTotalSpent}}</span>
@@ -30,11 +35,21 @@ export default {
       type: Array
     }
   },
+  data: () => {
+    return {
+      adding: true
+    }
+  },
   computed: {
     getTotalSpent() {
       return this.miscs.reduce((total, item) => {
         return total + item.value;
       }, 0);
+    }
+  },
+  methods: {
+    addMisc(misc){
+      this.$emit('addMisc', misc)
     }
   }
 };
@@ -42,7 +57,6 @@ export default {
 
 <style>
 #misc-list {
-  margin-top: 2rem;
   list-style-type: none;
 }
 .misc-list-item {
