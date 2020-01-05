@@ -10,10 +10,11 @@
           <span class="misc-value">-${{misc.value}}</span>
         </li>
       </ul>
-      <div id="new-misc">
-        <input type="text">
-        <input type="number">
-        <button @click="this.addMisc()">Submit</button>
+      <div v-if="adding" id="new-misc">
+        <input class="text" name="misc-item-name" id="misc-item-name" type="text" />
+        <input class="text" name="misc-item-value" id="misc-item-value" type="number" />
+        <button @click="addMisc()">Submit</button>
+        <button @click="cancelMisc()">Cancel</button>
       </div>
       <div class="text misc-list-item">
         <span>Total Spent</span>
@@ -23,6 +24,7 @@
         <span>Remaining</span>
         <span></span>
       </div>
+      <div @click="adding = true" class="add-btn" id="add-misc">+</div>
     </div>
   </main>
 </template>
@@ -37,8 +39,8 @@ export default {
   },
   data: () => {
     return {
-      adding: true
-    }
+      adding: false
+    };
   },
   computed: {
     getTotalSpent() {
@@ -48,8 +50,27 @@ export default {
     }
   },
   methods: {
-    addMisc(misc){
-      this.$emit('addMisc', misc)
+    addMisc() {
+      const value = parseFloat(
+        document.getElementById("misc-item-value").value || 0
+      );
+      const name = document.getElementById("misc-item-name").value;
+
+      if (value == 0 || name.trim() == "") {
+        return;
+      }
+
+      const misc = {
+        id: this.miscs.length + 1,
+        complete: true,
+        value,
+        name
+      };
+      this.adding = !this.adding;
+      this.$emit("addMisc", misc);
+    },
+    cancelMisc() {
+      this.adding = !this.adding;
     }
   }
 };
@@ -58,6 +79,7 @@ export default {
 <style>
 #misc-list {
   list-style-type: none;
+  margin-bottom: 2rem;
 }
 .misc-list-item {
   display: flex;

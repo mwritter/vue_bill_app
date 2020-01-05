@@ -41,7 +41,7 @@ export default {
         { name: "Toyota", value: 216.0, complete: false },
         { name: "Nission", value: 245.0, complete: false },
         { name: "Car insurance", value: 195.0, complete: false },
-        { name: "Gym", value: 20.0, complete: false },
+        { name: "Gym", value: 20.0, complete: false }
       ],
       miscs: []
     };
@@ -74,10 +74,8 @@ export default {
         this.currentTotal += parseFloat(bill.value);
       }
     },
-    addMisc(misc){
-      this.miscs = misc
-        ? [...this.miscs, misc]
-        : this.misc;
+    addMisc(misc) {
+      this.miscs = misc ? [...this.miscs, misc] : this.misc;
     }
   }
 };
@@ -132,5 +130,19 @@ main {
   max-width: 100px;
   font-size: 1.2em;
   margin-left: 10px;
+}
+.add-btn {
+  display: flex;
+  font-size: 1em;
+  justify-content: center;
+  align-items: center;
+  justify-self: end;
+  cursor: pointer;
+  background: white;
+  color: black;
+  width: 3em;
+  height: 3em;
+  border-radius: 50%;
+  border: 1px solid black;
 }
 </style>
