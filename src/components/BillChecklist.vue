@@ -1,18 +1,22 @@
 <template>
   <main>
     <div class="container">
-      <div id="heading">
-        <h1 class="text">Bill Checklist</h1>
+      <div>
+        <h1 id="heading" class="text">Bill Checklist</h1>
+        <ul id="bill-list">
+          <li class="bill-list-item" v-for="(bill) in bills" :key="bill.name">
+            <div>
+              <input class="checkbox" @click="toggleBill(bill)" :id="bill.name" type="checkbox" />
+              <label class="text" for="price">{{bill.name}}</label>
+            </div>
+            <span id="price" class="text" name="price">${{bill.value}}</span>
+          </li>
+        </ul>
       </div>
-      <ul id="bill-list">
-        <li class="bill-list-item" v-for="(bill) in bills" :key="bill.name">
-          <div>
-            <input @click="toggleBill(bill)" :id="bill.name" type="checkbox" />
-            <label class="text" for="price">{{bill.name}}</label>
-          </div>
-          <span id="price" class="text" name="price">${{bill.value}}</span>
-        </li>
-      </ul>
+
+      <div id="add-section">
+        <div @click="adding = true" class="action-btn" id="add-bill">+</div>
+      </div>
     </div>
   </main>
 </template>

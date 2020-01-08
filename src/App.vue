@@ -11,7 +11,12 @@
         :bills="this.getCompletedBills"
         :currentTotal="this.getCurrentTotal"
       />
-      <app-misc @addMisc="addMisc" :miscs="this.getMisc"></app-misc>
+      <app-misc
+        :currentTotal="this.getCurrentTotal"
+        @addMisc="addMisc"
+        @deleteMisc="deleteMisc"
+        :miscs="this.getMisc"
+      ></app-misc>
     </div>
   </div>
 </template>
@@ -43,7 +48,8 @@ export default {
         { name: "Car insurance", value: 195.0, complete: false },
         { name: "Gym", value: 20.0, complete: false }
       ],
-      miscs: []
+      miscs: [],
+      totalPaid: 0
     };
   },
   computed: {
@@ -57,7 +63,7 @@ export default {
       return this.miscs;
     },
     getCurrentTotal() {
-      return parseFloat(this.currentTotal);
+      return parseFloat(this.currentTotal) - parseFloat(this.totalPaid);
     }
   },
   methods: {
@@ -69,13 +75,20 @@ export default {
       this.currentTotal = parseFloat(this.currentTotal);
       // after toggle
       if (bill.complete) {
-        this.currentTotal -= parseFloat(bill.value);
+        this.totalPaid += bill.value;
       } else {
-        this.currentTotal += parseFloat(bill.value);
+        this.totalPaid -= bill.value;
       }
     },
     addMisc(misc) {
       this.miscs = misc ? [...this.miscs, misc] : this.misc;
+      this.totalPaid += misc ? misc.value : 0;
+    },
+    deleteMisc(misc) {
+      this.miscs = this.miscs.filter(item => {
+        return item.id != misc.id;
+      });
+      this.totalPaid -= misc.value;
     }
   }
 };
@@ -88,13 +101,13 @@ export default {
   box-sizing: border-box;
 }
 #app {
-  display: gird;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  /* border: 1px solid black; */
 }
 #components {
   display: grid;
@@ -104,12 +117,15 @@ export default {
 main {
   display: flex;
   justify-content: center;
+  align-content: start;
+  height: 75vh;
+  /* border: 1px solid blue; */
 }
 .container {
-  display: grid;
-  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 75%;
-  align-content: start;
 }
 #heading {
   transform: rotate(-6deg);
@@ -131,12 +147,15 @@ main {
   font-size: 1.2em;
   margin-left: 10px;
 }
-.add-btn {
+#add-section {
+  display: grid;
+  justify-content: end;
+}
+.action-btn {
   display: flex;
   font-size: 1em;
   justify-content: center;
   align-items: center;
-  justify-self: end;
   cursor: pointer;
   background: white;
   color: black;
@@ -144,5 +163,8 @@ main {
   height: 3em;
   border-radius: 50%;
   border: 1px solid black;
+}
+.checkbox {
+  margin: 0.5rem;
 }
 </style>
