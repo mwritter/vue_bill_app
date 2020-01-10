@@ -13,9 +13,9 @@
               <span class="bill-name">{{bill.name}}</span>
               <span class="bill-value">-${{bill.value}}</span>
             </li>
-            <li class="ledger-item" v-if="miscs.length > 0">
+            <li class="ledger-item" v-if="this.miscTotal > 0">
               <span class="bill-name">Miscellaneous</span>
-              <span class="bill-value">-${{this.getCurrentMiscTotal}}</span>
+              <span class="bill-value">-${{this.miscTotal}}</span>
             </li>
           </ul>
         </div>
@@ -28,8 +28,8 @@
 export default {
   name: "Ledger",
   props: {
-    miscs: {
-      type: Array
+    miscTotal: {
+      type: Number
     },
     bills: {
       type: Array
@@ -40,15 +40,6 @@ export default {
   },
   data() {
     return {};
-  },
-  computed: {
-    getCurrentMiscTotal() {
-      let total = 0;
-      for (const misc of this.miscs) {
-        total += misc.value;
-      }
-      return total;
-    }
   }
 };
 </script>

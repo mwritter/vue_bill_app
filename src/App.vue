@@ -7,7 +7,7 @@
     <div id="components">
       <app-bill-checklist @toggleBill="toggleBill" :bills="this.getBills()" />
       <app-ledger
-        :miscs="this.getMisc"
+        :miscTotal="this.getCurrentMiscTotal"
         :bills="this.getCompletedBills"
         :currentTotal="this.getCurrentTotal"
       />
@@ -48,7 +48,10 @@ export default {
         { name: "Car insurance", value: 195.0, complete: false },
         { name: "Gym", value: 20.0, complete: false }
       ],
-      miscs: [],
+      miscs: [
+        { name: "Rent", value: 535.0, complete: false, id: 1 },
+        { name: "Mediacom", value: 65.0, complete: false, id: 2 }
+      ],
       totalPaid: 0
     };
   },
@@ -62,8 +65,21 @@ export default {
     getMisc() {
       return this.miscs;
     },
+    getCurrentMiscTotal() {
+      return this.miscs.reduce((total, item) => {
+        return total + parseFloat(item.value);
+      }, 0);
+    },
+    getCurrentCompletedBillTotal() {
+      return this.getCompletedBills.reduce((total, item) => {
+        return total + parseFloat(item.value);
+      }, 0);
+    },
     getCurrentTotal() {
-      return parseFloat(this.currentTotal) - parseFloat(this.totalPaid);
+      const totalPaid =
+        parseFloat(this.getCurrentMiscTotal) +
+        parseFloat(this.getCurrentCompletedBillTotal);
+      return parseFloat(this.currentTotal) - totalPaid;
     }
   },
   methods: {
@@ -73,22 +89,14 @@ export default {
     toggleBill(bill) {
       bill.complete = !bill.complete;
       this.currentTotal = parseFloat(this.currentTotal);
-      // after toggle
-      if (bill.complete) {
-        this.totalPaid += bill.value;
-      } else {
-        this.totalPaid -= bill.value;
-      }
     },
     addMisc(misc) {
       this.miscs = misc ? [...this.miscs, misc] : this.misc;
-      this.totalPaid += misc ? misc.value : 0;
     },
     deleteMisc(misc) {
       this.miscs = this.miscs.filter(item => {
         return item.id != misc.id;
       });
-      this.totalPaid -= misc.value;
     }
   }
 };
@@ -117,7 +125,7 @@ export default {
 main {
   display: flex;
   justify-content: center;
-  align-content: start;
+  align-content: flex-start;
   height: 75vh;
   /* border: 1px solid blue; */
 }
@@ -151,20 +159,52 @@ main {
   display: grid;
   justify-content: end;
 }
+.action-section {
+  display: grid;
+  margin-top: 1rem;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  grid-gap: 1rem;
+}
 .action-btn {
   display: flex;
   font-size: 1em;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  background: white;
-  color: black;
-  width: 3em;
-  height: 3em;
   border-radius: 50%;
   border: 1px solid black;
 }
+.small-btn {
+  justify-self: center;
+  align-self: center;
+  border-radius: 50%;
+  border: 1px solid black;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+.small-success-btn {
+  background-color: rgba(126, 216, 146, 0.589);
+}
+.small-danger-btn {
+  background-color: rgba(216, 122, 122, 0.589);
+}
+.add-btn {
+  width: 3em;
+  height: 3em;
+  background: white;
+  color: black;
+}
 .checkbox {
   margin: 0.5rem;
+}
+input {
+  border: none;
+  border-bottom: 1px solid black;
+  text-align: center;
+}
+input:focus {
+  outline: none;
 }
 </style>

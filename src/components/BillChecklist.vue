@@ -15,7 +15,7 @@
       </div>
 
       <div id="add-section">
-        <div @click="adding = true" class="action-btn" id="add-bill">+</div>
+        <div @click="adding = true" class="action-btn add-btn" id="add-bill">+</div>
       </div>
     </div>
   </main>

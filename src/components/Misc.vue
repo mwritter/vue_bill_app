@@ -6,33 +6,64 @@
         <ul id="misc-list">
           <li class="text misc-list-item" v-for="misc in miscs" :key="misc.id">
             <div class="misc-name">{{misc.name}}</div>
-            <div @click="deleteMisc(misc)" title="Remove Misc Item" class="delete-btn"></div>
+            <span
+              @click="deleteMisc(misc)"
+              title="Remove Misc Item"
+              class="small-btn small-danger-btn action-btn"
+            ></span>
             <span class="misc-value">-${{misc.value}}</span>
           </li>
         </ul>
 
         <div id="misc-info">
-          <div>
-            <div class="text misc-list-item">
-              <span>Total Spent</span>
-              <span>${{this.getTotalSpent}}</span>
-            </div>
-            <div class="text misc-list-item">
-              <span>Remaining</span>
-              <span>${{this.getRemaining}}</span>
-            </div>
-            <div v-if="adding" id="new-misc">
-              <input class="text" name="misc-item-name" id="misc-item-name" type="text" />
-              <input class="text" name="misc-item-value" id="misc-item-value" type="number" />
-              <button @click="addMisc()">Submit</button>
-              <button @click="cancelMisc()">Cancel</button>
-            </div>
+          <div class="text misc-list-item">
+            <div>Total Spent</div>
+            <span>Pizza</span>
+            <span>${{this.getTotalSpent}}</span>
           </div>
+          <div class="text misc-list-item">
+            <div>Remaining</div>
+            <span>Pizza</span>
+            <span>${{this.getRemaining}}</span>
+          </div>
+          <form v-if="this.adding" id="new-misc-form" @submit.prevent>
+            <div id="form-inputs">
+              <input
+                class="text"
+                placeholder="Description"
+                name="misc-item-name"
+                id="misc-item-name"
+                type="text"
+              />
+              <input
+                class="text"
+                placeholder="Price"
+                step="0.01"
+                min="1"
+                name="misc-item-value"
+                id="misc-item-value"
+                type="number"
+              />
+            </div>
+
+            <div class="action-section">
+              <button
+                class="action-btn small-btn small-success-btn"
+                title="Submit Misc"
+                @click="addMisc()"
+              ></button>
+              <button
+                class="action-btn small-btn small-danger-btn"
+                title="Cancel"
+                @click="cancelMisc()"
+              ></button>
+            </div>
+          </form>
         </div>
       </div>
 
       <div id="add-section">
-        <div @click="adding = true" title="Add Misc Item" class="action-btn" id="add-misc">+</div>
+        <div @click="adding = true" title="Add Misc Item" class="action-btn add-btn" id="add-misc">+</div>
       </div>
     </div>
   </main>
@@ -58,7 +89,7 @@ export default {
   computed: {
     getTotalSpent() {
       return this.miscs.reduce((total, item) => {
-        return total + item.value;
+        return total + parseFloat(item.value);
       }, 0);
     },
     getRemaining() {
@@ -67,28 +98,31 @@ export default {
   },
   methods: {
     addMisc() {
-      const value = parseFloat(
-        document.getElementById("misc-item-value").value || 0
-      );
-      const name = document.getElementById("misc-item-name").value;
+      const input_value = document.getElementById("misc-item-value");
+      const input_name = document.getElementById("misc-item-name");
+      const form = document.getElementById("new-misc-form");
 
-      if (value == 0 || name.trim() == "") {
+      let value = input_value.value || 0;
+
+      if (input_value <= 0 || input_name.value.trim() == "") {
         return;
       }
-
       const misc = {
         id: this.miscs.length + 1,
         complete: true,
-        value,
-        name
+        value: value,
+        name: input_name.value
       };
       this.adding = !this.adding;
+      form.reset();
       this.$emit("addMisc", misc);
     },
     deleteMisc(misc) {
       this.$emit("deleteMisc", misc);
     },
     cancelMisc() {
+      const form = document.getElementById("new-misc-form");
+      form.reset();
       this.adding = !this.adding;
     }
   }
@@ -99,33 +133,23 @@ export default {
 #misc-info {
   margin-top: 2rem;
 }
-#misc-list {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  list-style-type: none;
-}
+
 .misc-list-item {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   padding-left: 1rem;
   padding-right: 1rem;
   border: 1px solid white;
 }
-
-.delete-btn {
-  visibility: hidden;
+.small-btn {
   align-self: center;
-  margin-right: 0.3rem;
-  border: 1px solid black;
-  border-radius: 50%;
-  background-color: rgba(216, 122, 122, 0.589);
-  width: 0.5em;
-  height: 0.5em;
-  cursor: pointer;
 }
-.misc-list-item:hover .delete-btn {
+
+.misc-list-item:hover .small-danger-btn {
   visibility: visible;
+}
+.misc-list-item .small-danger-btn {
+  visibility: hidden;
 }
 .misc-list-item:hover {
   border: 1px solid rgba(216, 122, 122, 0.315);
@@ -137,11 +161,7 @@ export default {
 .misc-value {
   color: red;
 }
-.misc-name {
-  display: grid;
-  grid-template-columns: auto auto;
-  align-items: center;
-}
+
 #misc-delete-btn {
   display: flex;
   justify-content: center;
@@ -149,5 +169,13 @@ export default {
   border-radius: 50%;
   height: 25px;
   width: 25px;
+}
+#new-misc-form {
+  margin-top: 1rem;
+}
+#form-inputs {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-column-gap: 1rem;
 }
 </style>
