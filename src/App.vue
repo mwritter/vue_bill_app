@@ -37,21 +37,18 @@ export default {
     return {
       currentTotal: 0,
       bills: [
-        { name: "Rent", value: 535.0, complete: false },
-        { name: "Mediacom", value: 65.0, complete: false },
-        { name: "Gas", value: 25.0, complete: false },
-        { name: "Student Loan", value: 460.0, complete: false },
-        { name: "Utility", value: 95.0, complete: false },
-        { name: "Phone", value: 181.0, complete: false },
-        { name: "Toyota", value: 216.0, complete: false },
-        { name: "Nission", value: 245.0, complete: false },
-        { name: "Car insurance", value: 195.0, complete: false },
-        { name: "Gym", value: 20.0, complete: false }
+        { name: "Rent", value: 535.0, complete: false, type: 'bill' },
+        { name: "Mediacom", value: 65.0, complete: false, type: 'bill' },
+        { name: "Gas", value: 25.0, complete: false, type: 'bill' },
+        { name: "Student Loan", value: 460.0, complete: false, type: 'bill' },
+        { name: "Utility", value: 95.0, complete: false, type: 'bill' },
+        { name: "Phone", value: 181.0, complete: false, type: 'bill' },
+        { name: "Toyota", value: 216.0, complete: false, type: 'bill' },
+        { name: "Nission", value: 245.0, complete: false, type: 'bill' },
+        { name: "Car insurance", value: 195.0, complete: false, type: 'bill' },
+        { name: "Gym", value: 20.0, complete: false, type: 'bill' }
       ],
-      miscs: [
-        { name: "Rent", value: 535.0, complete: false, id: 1 },
-        { name: "Mediacom", value: 65.0, complete: false, id: 2 }
-      ],
+      miscs: [],
       totalPaid: 0
     };
   },
@@ -97,7 +94,7 @@ export default {
       this.miscs = this.miscs.filter(item => {
         return item.id != misc.id;
       });
-    }
+    },
   }
 };
 </script>

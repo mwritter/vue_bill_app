@@ -18,12 +18,12 @@
         <div id="misc-info">
           <div class="text misc-list-item">
             <div>Total Spent</div>
-            <span>Pizza</span>
+            <span></span>
             <span>${{this.getTotalSpent}}</span>
           </div>
           <div class="text misc-list-item">
             <div>Remaining</div>
-            <span>Pizza</span>
+            <span></span>
             <span>${{this.getRemaining}}</span>
           </div>
           <form v-if="this.adding" id="new-misc-form" @submit.prevent>
@@ -98,13 +98,13 @@ export default {
   },
   methods: {
     addMisc() {
-      const input_value = document.getElementById("misc-item-value");
+      const input_value = parseFloat(document.getElementById("misc-item-value").value);
       const input_name = document.getElementById("misc-item-name");
       const form = document.getElementById("new-misc-form");
 
-      let value = input_value.value || 0;
+      let value = input_value || 0;
 
-      if (input_value <= 0 || input_name.value.trim() == "") {
+      if (value <= 0 || input_name.value.trim() == "") {
         return;
       }
       const misc = {
@@ -136,9 +136,7 @@ export default {
 
 .misc-list-item {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  padding-left: 1rem;
-  padding-right: 1rem;
+  grid-template-columns: 1fr 2fr 1fr;
   border: 1px solid white;
 }
 .small-btn {
@@ -157,25 +155,23 @@ export default {
 #misc-info .misc-list-item:hover {
   border: 1px solid white;
 }
-
+#misc-info .misc-list-item {
+  grid-template-columns: auto 2fr auto;
+}
+.misc-name{
+  justify-self: start;
+}
 .misc-value {
   color: red;
+  justify-self: end;
 }
 
-#misc-delete-btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  height: 25px;
-  width: 25px;
-}
 #new-misc-form {
   margin-top: 1rem;
 }
 #form-inputs {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto;
   grid-column-gap: 1rem;
 }
 </style>

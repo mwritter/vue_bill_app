@@ -5,11 +5,10 @@
         <h1 id="heading" class="text">Bill Checklist</h1>
         <ul id="bill-list">
           <li class="bill-list-item" v-for="(bill) in bills" :key="bill.name">
-            <div>
-              <input class="checkbox" @click="toggleBill(bill)" :id="bill.name" type="checkbox" />
-              <label class="text" for="price">{{bill.name}}</label>
-            </div>
-            <span id="price" class="text" name="price">${{bill.value}}</span>
+              <!-- <input class="checkbox" @click="toggleBill(bill)" :id="bill.name" type="checkbox" /> -->
+            <span class="text bill-name">{{bill.name}}</span>
+            <span @click="toggleBill(bill)" :class="{'small-success-btn': bill.complete }" class="bill-checkbox action-btn small-btn"></span>
+            <span class="text bill-price" name="price">${{bill.value}}</span>
           </li>
         </ul>
       </div>
@@ -45,11 +44,20 @@ export default {
 </script>
 
 <style>
-#bill-list {
-  padding: 0px;
+.bill-price{
+  grid-area: price;
+}
+.bill-name{
+  grid-area: name;
+  justify-self: start;
+}
+.bill-checkbox{
+  grid-area: checkbox;
 }
 .bill-list-item {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: auto 2fr auto;
+  grid-template-areas: "checkbox name price";
 }
 </style>
